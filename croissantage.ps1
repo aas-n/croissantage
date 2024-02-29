@@ -2,7 +2,7 @@ param(
     [string[]]$Recipients
 )
 
-function Send {
+function S {
     param(
         [string[]]$Recipients
     )
