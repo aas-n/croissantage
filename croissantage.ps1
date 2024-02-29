@@ -19,6 +19,4 @@ function Send-MailViaOutlook {
     $Mail.Send()
 }
 
-Send-MailViaOutlook -Recipients $Recipients
-
 Start-Process "https://www.croissantage.fr"
