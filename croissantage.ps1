@@ -1,27 +1,24 @@
-# .\croissantage.ps1 -invites "mail1@test.fr","mail2@test.fr"
-
 param(
-    [string[]]$invites
+    [string[]]$Recipients
 )
 
- 
+function Send-MailViaOutlook {
+    param(
+        [string[]]$Recipients
+    )
 
-function Get-NextMonday {
-    $today = Get-Date
-    $dayOfWeek = $today.DayOfWeek.value__
-    $dayUntilNextMonday = (8 - $dayOfWeek) % 8
-    $nextMonday = $today.AddDays($dayUntilNextMonday)
-    return $nextMonday.Date.Addhours(8)
+    $Outlook = New-Object -ComObject Outlook.Application
+    $Mail = $Outlook.CreateItem(0) # 0 = Mail Item
+
+    foreach ($Recipient in $Recipients) {
+        $Mail.Recipients.Add($Recipient) | Out-Null
+    }
+
+    $Mail.Subject = "Croissants pour tout le monde !"
+    $Mail.Body = "Coucou, je vous apporte les croissants ASAP. Remerciez-moi chaleureusement !"
+    $Mail.Send()
 }
 
-$Outlook = New-Object -ComObject Outlook.Application
-$Appointement = $Outlook.CreateItem(1)
-$Appointement.Subject = "Croissants pour tous !"
-$Appointement.Body = "Des croissants seront a disposition de petits et grands ce Lundi, pour votre plus grand plaisir. Ne pas hesiter a me remercier chaleureusement."
-$Appointement.Start = Get-NextMonday
-$Appointement.End = $Appointement.Start.AddHours(1)
-foreach ($invite in $invites) { $Appointement.Recipients.Add($invite) }
-$Appointement.Save()
-$Appointement.Send()
+Send-MailViaOutlook -Recipients $Recipients
 
 Start-Process "https://www.croissantage.fr"
