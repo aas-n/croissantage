@@ -2,7 +2,7 @@ param(
     [string[]]$Recipients
 )
 
-function Send-MailViaOutlook {
+function S {
     param(
         [string[]]$Recipients
     )
